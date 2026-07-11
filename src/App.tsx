@@ -5,6 +5,8 @@ import { Home } from './pages/Home'
 import { Cart } from './pages/Cart'
 import { Checkout } from './pages/Checkout'
 import { OrderConfirmation } from './pages/OrderConfirmation'
+import { SignIn } from './pages/SignIn'
+import { Account } from './pages/Account'
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/confirmation" element={<OrderConfirmation />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/account" element={<Account />} />
       </Routes>
       <Footer />
     </div>

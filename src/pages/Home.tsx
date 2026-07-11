@@ -1,9 +1,13 @@
 import { useMemo, useState } from 'react'
 import { categories, menu, type Category } from '../data/menu'
 import { MenuItemCard } from '../components/MenuItemCard'
+import { useStoreLocation } from '../context/LocationContext'
+import { LocationModal } from '../components/LocationModal'
 
 export function Home() {
   const [activeCategory, setActiveCategory] = useState<Category>(categories[0])
+  const { location, canDeliver } = useStoreLocation()
+  const [locationModalOpen, setLocationModalOpen] = useState(false)
 
   const items = useMemo(
     () => menu.filter((item) => item.category === activeCategory),
@@ -23,7 +27,27 @@ export function Home() {
           Elevated bites and shareable plates, crafted with premium ingredients.
           Order online for pickup or delivery.
         </p>
+
+        <button
+          type="button"
+          onClick={() => setLocationModalOpen(true)}
+          className="mx-auto mt-5 flex items-center gap-2 rounded-full border border-ink/15 px-4 py-2 text-sm text-ink-soft hover:border-gold hover:text-gold"
+        >
+          <span aria-hidden>📍</span>
+          {location ? (
+            <span>
+              Ordering from <strong className="text-ink">{location.name}</strong> &middot;{' '}
+              {canDeliver ? 'delivery available' : 'pickup only'}
+            </span>
+          ) : (
+            <span>Set your zip code to find your nearest location</span>
+          )}
+        </button>
       </section>
+
+      {locationModalOpen && (
+        <LocationModal onClose={() => setLocationModalOpen(false)} />
+      )}
 
       <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
         {categories.map((category) => (

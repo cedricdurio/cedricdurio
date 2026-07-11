@@ -4,6 +4,7 @@ type ConfirmationState = {
   orderNumber: number
   total: number
   fulfillment: 'pickup' | 'delivery'
+  locationName: string
 }
 
 export function OrderConfirmation() {
@@ -19,7 +20,7 @@ export function OrderConfirmation() {
       <p className="text-5xl">🎉</p>
       <h1 className="mt-4 font-display text-3xl text-ink">Order confirmed!</h1>
       <p className="mt-2 text-ink-soft">
-        Thanks for ordering from Prime Bites. Your order number is:
+        Thanks for ordering from {state.locationName}. Your order number is:
       </p>
       <p className="mt-4 text-2xl font-semibold tracking-wide text-gold">
         #{state.orderNumber}

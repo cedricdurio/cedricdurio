@@ -7,11 +7,16 @@ order, and check out.
 
 - Menu browsing across categories (Signature Bites, Starters, Mains, Drinks, Desserts)
 - Cart with quantity controls, running subtotal, and item removal
+- Zip-code lookup that resolves your nearest of four locations and checks
+  delivery availability for that zip
+- Sign in / create a profile to save your details and view order history
 - Checkout flow with pickup/delivery selection, tax, and delivery fee
 - Order confirmation screen with a generated order number
 
-Checkout is a front-end demo only — no real payments are processed and no
-data is persisted or sent anywhere.
+Checkout is a front-end demo only — no real payments are processed. Profiles,
+saved locations, and order history are stored in the browser's `localStorage`
+(no backend/server, no password hashing) purely to demonstrate the flow —
+don't reuse this auth approach for anything handling real user data.
 
 ## Tech stack
 
