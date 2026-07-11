@@ -1,10 +1,36 @@
-- 👋 Hi, I’m @cedricdurio
-- 👀 I’m interested in learning all about software development 
-- 🌱 I’m currently learning ...
-- 💞️ I’m looking to collaborate on getting as much experience as I can and I'm excited to learn. 
-- 📫 How to reach me cedricdurio@aol.com and cedricdurio2@gmail.com
+# Prime Bites 🍢
 
-<!---
-cedricdurio/cedricdurio is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
+A food-ordering web app for Prime Bites — browse the menu by category, build an
+order, and check out.
+
+## Features
+
+- Menu browsing across categories (Signature Bites, Starters, Mains, Drinks, Desserts)
+- Cart with quantity controls, running subtotal, and item removal
+- Checkout flow with pickup/delivery selection, tax, and delivery fee
+- Order confirmation screen with a generated order number
+
+Checkout is a front-end demo only — no real payments are processed and no
+data is persisted or sent anywhere.
+
+## Tech stack
+
+- React + TypeScript, built with Vite
+- Tailwind CSS v4
+- React Router for client-side routing
+
+## Getting started
+
+```bash
+npm install
+npm run dev
+```
+
+Then open the printed local URL in your browser.
+
+## Scripts
+
+- `npm run dev` — start the development server
+- `npm run build` — type-check and build for production
+- `npm run preview` — preview the production build locally
+- `npm run lint` — run oxlint
