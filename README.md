@@ -10,6 +10,9 @@ cuisine, read and leave ratings/reviews, or let the app pick something for you.
 - Zip-code lookup sorts restaurants by distance from you
 - Filter by cuisine
 - "Surprise me" button picks a random restaurant from the current list
+- "Decide together" quiz for couples/groups who can't agree — answer a mood,
+  cuisine craving, and budget question and get 3 scored recommendations with
+  reasons
 - Sign in / create a profile to leave a 1-5 star rating and comment on a
   restaurant; see the average rating and full review list on each restaurant's
   page

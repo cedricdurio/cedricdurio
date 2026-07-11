@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { cuisines, restaurants, sortByProximity } from '../data/restaurants'
 import { RestaurantCard } from '../components/RestaurantCard'
 import { useStoreLocation } from '../context/LocationContext'
@@ -59,6 +59,14 @@ export function Home() {
             <span aria-hidden>🎲</span>
             <span>Surprise me</span>
           </button>
+
+          <Link
+            to="/decide"
+            className="flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-4 py-2 text-sm font-medium text-gold hover:bg-gold/20"
+          >
+            <span aria-hidden>👥</span>
+            <span>Decide together</span>
+          </Link>
         </div>
       </section>
 

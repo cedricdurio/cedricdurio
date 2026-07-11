@@ -5,6 +5,7 @@ import { Home } from './pages/Home'
 import { RestaurantDetail } from './pages/RestaurantDetail'
 import { SignIn } from './pages/SignIn'
 import { Account } from './pages/Account'
+import { DecideTogether } from './pages/DecideTogether'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/restaurant/:id" element={<RestaurantDetail />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/decide" element={<DecideTogether />} />
       </Routes>
       <Footer />
     </div>
