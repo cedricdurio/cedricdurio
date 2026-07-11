@@ -1,15 +1,23 @@
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useStoreLocation } from '../context/LocationContext'
+import { useReviews } from '../context/ReviewsContext'
+import { findRestaurant } from '../data/restaurants'
+import { StarRating } from '../components/StarRating'
 
 export function Account() {
   const { user, signOut } = useAuth()
-  const { location, zip } = useStoreLocation()
+  const { zip } = useStoreLocation()
+  const { reviews } = useReviews()
   const navigate = useNavigate()
 
   if (!user) {
     return <Navigate to="/signin" replace />
   }
+
+  const myReviews = reviews
+    .filter((review) => review.userEmail === user.email)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
   const handleSignOut = () => {
     signOut()
@@ -34,40 +42,46 @@ export function Account() {
 
       <div className="mt-8 rounded-xl border border-ink/10 bg-white/60 p-4">
         <p className="text-sm font-semibold uppercase tracking-wide text-ink-soft">
-          Saved location
+          Saved zip code
         </p>
-        {location && zip ? (
-          <>
-            <p className="mt-1 font-medium text-ink">{location.name}</p>
-            <p className="text-sm text-ink-soft">
-              {location.address}, {location.city} &middot; zip {zip}
-            </p>
-          </>
+        {zip ? (
+          <p className="mt-1 text-sm text-ink-soft">
+            Restaurants are sorted by distance from {zip}.
+          </p>
         ) : (
           <p className="mt-1 text-sm text-ink-soft">
-            No location saved yet — use the location button in the header.
+            No zip code saved yet — use the location button in the header.
           </p>
         )}
       </div>
 
-      <h2 className="mt-10 font-display text-xl text-ink">Order history</h2>
-      {user.orders.length === 0 ? (
-        <p className="mt-2 text-ink-soft">You haven't placed an order yet.</p>
+      <h2 className="mt-10 font-display text-xl text-ink">Your reviews</h2>
+      {myReviews.length === 0 ? (
+        <p className="mt-2 text-ink-soft">You haven't reviewed a restaurant yet.</p>
       ) : (
-        <ul className="mt-4 divide-y divide-ink/10 rounded-xl border border-ink/10 bg-white/60">
-          {user.orders.map((order) => (
-            <li key={order.orderNumber} className="flex items-center justify-between p-4">
-              <div>
-                <p className="font-medium text-ink">Order #{order.orderNumber}</p>
-                <p className="text-sm text-ink-soft">{order.itemSummary}</p>
-                <p className="text-sm text-ink-soft">
-                  {order.locationName} &middot; {order.fulfillment} &middot;{' '}
-                  {new Date(order.date).toLocaleDateString()}
+        <ul className="mt-4 space-y-4">
+          {myReviews.map((review) => {
+            const restaurant = findRestaurant(review.restaurantId)
+            return (
+              <li key={review.id} className="rounded-xl border border-ink/10 bg-white/60 p-4">
+                <div className="flex items-center justify-between">
+                  <Link
+                    to={`/restaurant/${review.restaurantId}`}
+                    className="font-medium text-ink hover:text-gold"
+                  >
+                    {restaurant?.name ?? 'Restaurant'}
+                  </Link>
+                  <StarRating rating={review.rating} size="sm" />
+                </div>
+                {review.comment && (
+                  <p className="mt-2 text-sm text-ink-soft">{review.comment}</p>
+                )}
+                <p className="mt-2 text-xs text-ink-soft">
+                  {new Date(review.date).toLocaleDateString()}
                 </p>
-              </div>
-              <span className="font-semibold text-ink">${order.total.toFixed(2)}</span>
-            </li>
-          ))}
+              </li>
+            )
+          })}
         </ul>
       )}
     </main>

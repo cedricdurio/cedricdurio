@@ -1,22 +1,23 @@
 # Prime Bites 🍢
 
-A food-ordering web app for Prime Bites — browse the menu by category, build an
-order, and check out.
+A restaurant discovery app — find restaurants near a zip code, filter by
+cuisine, read and leave ratings/reviews, or let the app pick something for you.
 
 ## Features
 
-- Menu browsing across categories (Signature Bites, Starters, Mains, Drinks, Desserts)
-- Cart with quantity controls, running subtotal, and item removal
-- Zip-code lookup that resolves your nearest of four locations and checks
-  delivery availability for that zip
-- Sign in / create a profile to save your details and view order history
-- Checkout flow with pickup/delivery selection, tax, and delivery fee
-- Order confirmation screen with a generated order number
+- Browse a directory of restaurants across San Francisco, New York, Chicago,
+  and Los Angeles
+- Zip-code lookup sorts restaurants by distance from you
+- Filter by cuisine
+- "Surprise me" button picks a random restaurant from the current list
+- Sign in / create a profile to leave a 1-5 star rating and comment on a
+  restaurant; see the average rating and full review list on each restaurant's
+  page
+- Account page shows your saved zip code and every review you've written
 
-Checkout is a front-end demo only — no real payments are processed. Profiles,
-saved locations, and order history are stored in the browser's `localStorage`
-(no backend/server, no password hashing) purely to demonstrate the flow —
-don't reuse this auth approach for anything handling real user data.
+Profiles, saved zip code, and reviews are stored in the browser's
+`localStorage` (no backend/server, no password hashing) purely to demonstrate
+the flow — don't reuse this auth approach for anything handling real user data.
 
 ## Tech stack
 
