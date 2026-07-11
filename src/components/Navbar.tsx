@@ -1,13 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useCart } from '../context/CartContext'
 import { useStoreLocation } from '../context/LocationContext'
 import { useAuth } from '../context/AuthContext'
 import { LocationModal } from './LocationModal'
 
 export function Navbar() {
-  const { totalCount } = useCart()
-  const { location } = useStoreLocation()
+  const { zip } = useStoreLocation()
   const { user } = useAuth()
   const [locationModalOpen, setLocationModalOpen] = useState(false)
 
@@ -26,31 +24,19 @@ export function Navbar() {
         >
           <span aria-hidden>📍</span>
           <span className="max-w-[10rem] truncate sm:max-w-xs">
-            {location ? location.city : 'Set your location'}
+            {zip ? `Near ${zip}` : 'Set your zip code'}
           </span>
         </button>
 
         <nav className="flex items-center gap-4 text-sm font-medium text-ink-soft sm:gap-6">
           <Link to="/" className="hover:text-gold transition-colors">
-            Menu
+            Restaurants
           </Link>
           <Link
             to={user ? '/account' : '/signin'}
             className="hover:text-gold transition-colors"
           >
             {user ? user.name.split(' ')[0] : 'Sign in'}
-          </Link>
-          <Link
-            to="/cart"
-            className="relative flex items-center gap-1 rounded-full border border-ink/15 px-3 py-1.5 hover:border-gold hover:text-gold transition-colors"
-          >
-            <span aria-hidden>🛍️</span>
-            <span>Cart</span>
-            {totalCount > 0 && (
-              <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-gold text-xs font-semibold text-cream">
-                {totalCount}
-              </span>
-            )}
           </Link>
         </nav>
       </div>

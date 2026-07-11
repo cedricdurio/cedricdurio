@@ -2,11 +2,10 @@ import { Route, Routes } from 'react-router-dom'
 import { Navbar } from './components/Navbar'
 import { Footer } from './components/Footer'
 import { Home } from './pages/Home'
-import { Cart } from './pages/Cart'
-import { Checkout } from './pages/Checkout'
-import { OrderConfirmation } from './pages/OrderConfirmation'
+import { RestaurantDetail } from './pages/RestaurantDetail'
 import { SignIn } from './pages/SignIn'
 import { Account } from './pages/Account'
+import { DecideTogether } from './pages/DecideTogether'
 
 function App() {
   return (
@@ -14,11 +13,10 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/confirmation" element={<OrderConfirmation />} />
+        <Route path="/restaurant/:id" element={<RestaurantDetail />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/decide" element={<DecideTogether />} />
       </Routes>
       <Footer />
     </div>

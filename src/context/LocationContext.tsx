@@ -1,12 +1,9 @@
 import { createContext, useContext, useState, type ReactNode } from 'react'
-import { deliversTo, findNearestLocation, type Location } from '../data/locations'
 
 const STORAGE_KEY = 'primebites_zip'
 
 type LocationContextValue = {
   zip: string | null
-  location: Location | null
-  canDeliver: boolean
   setZip: (zip: string) => void
   clearZip: () => void
 }
@@ -17,9 +14,6 @@ export function LocationProvider({ children }: { children: ReactNode }) {
   const [zip, setZipState] = useState<string | null>(() =>
     localStorage.getItem(STORAGE_KEY),
   )
-
-  const location = zip ? findNearestLocation(zip) : null
-  const canDeliver = zip !== null && location !== null && deliversTo(location, zip)
 
   const setZip = (nextZip: string) => {
     localStorage.setItem(STORAGE_KEY, nextZip)
@@ -32,7 +26,7 @@ export function LocationProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <LocationContext.Provider value={{ zip, location, canDeliver, setZip, clearZip }}>
+    <LocationContext.Provider value={{ zip, setZip, clearZip }}>
       {children}
     </LocationContext.Provider>
   )

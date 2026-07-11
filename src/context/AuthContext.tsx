@@ -1,25 +1,14 @@
 import { createContext, useContext, useState, type ReactNode } from 'react'
 
-export type OrderRecord = {
-  orderNumber: number
-  date: string
-  total: number
-  fulfillment: 'pickup' | 'delivery'
-  locationName: string
-  itemSummary: string
-}
-
 type StoredUser = {
   name: string
   email: string
   password: string
-  orders: OrderRecord[]
 }
 
 type PublicUser = {
   name: string
   email: string
-  orders: OrderRecord[]
 }
 
 type AuthContextValue = {
@@ -27,7 +16,6 @@ type AuthContextValue = {
   signUp: (name: string, email: string, password: string) => string | null
   signIn: (email: string, password: string) => string | null
   signOut: () => void
-  addOrder: (order: OrderRecord) => void
 }
 
 const USERS_KEY = 'primebites_users'
@@ -48,7 +36,7 @@ function saveUsers(users: Record<string, StoredUser>) {
 }
 
 function toPublicUser(user: StoredUser): PublicUser {
-  return { name: user.name, email: user.email, orders: user.orders }
+  return { name: user.name, email: user.email }
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -65,7 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (users[normalizedEmail]) {
       return 'An account with this email already exists.'
     }
-    const newUser: StoredUser = { name, email: normalizedEmail, password, orders: [] }
+    const newUser: StoredUser = { name, email: normalizedEmail, password }
     users[normalizedEmail] = newUser
     saveUsers(users)
     localStorage.setItem(SESSION_KEY, normalizedEmail)
@@ -90,18 +78,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null)
   }
 
-  const addOrder = (order: OrderRecord) => {
-    if (!user) return
-    const users = loadUsers()
-    const stored = users[user.email]
-    if (!stored) return
-    stored.orders = [order, ...stored.orders]
-    saveUsers(users)
-    setUser(toPublicUser(stored))
-  }
-
   return (
-    <AuthContext.Provider value={{ user, signUp, signIn, signOut, addOrder }}>
+    <AuthContext.Provider value={{ user, signUp, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   )

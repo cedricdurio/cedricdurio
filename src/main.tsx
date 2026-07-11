@@ -3,18 +3,18 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
-import { CartProvider } from './context/CartContext'
 import { LocationProvider } from './context/LocationContext'
 import { AuthProvider } from './context/AuthContext'
+import { ReviewsProvider } from './context/ReviewsContext'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <AuthProvider>
         <LocationProvider>
-          <CartProvider>
+          <ReviewsProvider>
             <App />
-          </CartProvider>
+          </ReviewsProvider>
         </LocationProvider>
       </AuthProvider>
     </BrowserRouter>

@@ -33,8 +33,8 @@ export function SignIn() {
       </h1>
       <p className="mt-2 text-ink-soft">
         {mode === 'signin'
-          ? 'Sign in to see your saved details and order history.'
-          : 'Save your details for faster checkout next time.'}
+          ? 'Sign in to see your saved zip code and reviews.'
+          : 'Create a profile so you can rate and review restaurants.'}
       </p>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-3">
