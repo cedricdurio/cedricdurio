@@ -43,3 +43,13 @@ Then open the printed local URL in your browser.
 - `npm run build` — type-check and build for production
 - `npm run preview` — preview the production build locally
 - `npm run lint` — run oxlint
+
+## Deployment
+
+Pushing to `main` triggers `.github/workflows/deploy-pages.yml`, which builds
+the app and publishes it to GitHub Pages at
+`https://cedricdurio.github.io/cedricdurio/`.
+
+One-time setup: in this repo's Settings → Pages, set **Source** to
+**GitHub Actions**. After that, every push to `main` deploys automatically
+(or trigger it manually from the Actions tab).

@@ -9,7 +9,7 @@ import { ReviewsProvider } from './context/ReviewsContext'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <AuthProvider>
         <LocationProvider>
           <ReviewsProvider>
