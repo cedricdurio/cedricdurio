@@ -1,4 +1,4 @@
-import { restaurants, type Restaurant } from '../data/restaurants'
+import type { Restaurant } from '../data/restaurants'
 
 export type Mood = 'cozy' | 'lively' | 'adventurous' | 'comfort'
 export type Budget = Restaurant['priceRange'] | 'any'
@@ -38,12 +38,13 @@ export type Match = {
 }
 
 export function findMatches(
+  pool: Restaurant[],
   answers: QuizAnswers,
   zip: string | null,
   averageRating: (id: string) => number | null,
 ): Match[] {
   const proximityOrder = zip
-    ? [...restaurants]
+    ? [...pool]
         .sort(
           (a, b) =>
             Math.abs(parseInt(a.zip, 10) - parseInt(zip, 10)) -
@@ -54,7 +55,7 @@ export function findMatches(
 
   const moodLabel = answers.mood && moods.find((m) => m.id === answers.mood)?.label
 
-  const matches = restaurants.map((restaurant) => {
+  const matches = pool.map((restaurant) => {
     let score = 0
     const reasons: string[] = []
 

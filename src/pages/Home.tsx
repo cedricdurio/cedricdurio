@@ -1,12 +1,14 @@
 import { useMemo, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { cuisines, restaurants, sortByProximity } from '../data/restaurants'
+import { cuisinesFrom } from '../data/restaurants'
 import { randomHeroImage } from '../data/heroImages'
 import { RestaurantCard } from '../components/RestaurantCard'
 import { useStoreLocation } from '../context/LocationContext'
+import { useRestaurantPool } from '../hooks/useRestaurantPool'
 
 export function Home() {
   const { zip, setZip } = useStoreLocation()
+  const pool = useRestaurantPool()
   const [activeCuisine, setActiveCuisine] = useState<string>('All')
   const [zipInput, setZipInput] = useState('')
   const [zipError, setZipError] = useState<string | null>(null)
@@ -14,19 +16,19 @@ export function Home() {
   const [heroImageFailed, setHeroImageFailed] = useState(false)
   const navigate = useNavigate()
 
-  const sorted = useMemo(() => (zip ? sortByProximity(zip) : restaurants), [zip])
+  const cuisines = useMemo(() => cuisinesFrom(pool.restaurants), [pool.restaurants])
 
   const filtered = useMemo(
     () =>
       activeCuisine === 'All'
-        ? sorted
-        : sorted.filter((restaurant) => restaurant.cuisine === activeCuisine),
-    [sorted, activeCuisine],
+        ? pool.restaurants
+        : pool.restaurants.filter((restaurant) => restaurant.cuisine === activeCuisine),
+    [pool.restaurants, activeCuisine],
   )
 
   const handleSurpriseMe = () => {
-    const pool = filtered.length > 0 ? filtered : restaurants
-    const pick = pool[Math.floor(Math.random() * pool.length)]
+    const source = filtered.length > 0 ? filtered : pool.restaurants
+    const pick = source[Math.floor(Math.random() * source.length)]
     navigate(`/restaurant/${pick.id}`)
   }
 
@@ -38,6 +40,7 @@ export function Home() {
       return
     }
     setZipError(null)
+    setActiveCuisine('All')
     setZip(trimmed)
   }
 
@@ -83,8 +86,21 @@ export function Home() {
             </button>
           </form>
           {zipError && <p className="mt-2 text-sm text-red-300">{zipError}</p>}
-          {zip && !zipError && (
-            <p className="mt-2 text-sm text-cream/80">Showing restaurants near {zip}</p>
+          {zip && !zipError && pool.loading && (
+            <p className="mt-2 text-sm text-cream/80">Finding restaurants near {zip}…</p>
+          )}
+          {zip && !zipError && !pool.loading && pool.isLive && (
+            <p className="mt-2 text-sm text-cream/80">
+              Showing real restaurants near {zip}, via Yelp
+            </p>
+          )}
+          {zip && !zipError && !pool.loading && !pool.isLive && pool.liveUnavailable && (
+            <p className="mt-2 text-sm text-cream/80">
+              No live results near {zip} — showing our featured picks instead
+            </p>
+          )}
+          {zip && !zipError && !pool.loading && !pool.isLive && !pool.liveUnavailable && (
+            <p className="mt-2 text-sm text-cream/80">Showing our featured picks near {zip}</p>
           )}
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">

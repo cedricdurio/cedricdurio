@@ -5,8 +5,10 @@ cuisine, read and leave ratings/reviews, or let the app pick something for you.
 
 ## Features
 
-- Browse a directory of restaurants across San Francisco, New York, Chicago,
-  and Los Angeles
+- Real, live restaurant search by zip code via the Yelp Fusion API (see
+  [`worker/README.md`](worker/README.md) for setup) — falls back to a curated
+  demo list of 12 restaurants across San Francisco, New York, Chicago, and
+  Los Angeles if the live search isn't configured or has no nearby results
 - Zip-code lookup sorts restaurants by distance from you
 - Filter by cuisine
 - "Surprise me" button picks a random restaurant from the current list
@@ -53,3 +55,10 @@ the app and publishes it to GitHub Pages at
 One-time setup: in this repo's Settings → Pages, set **Source** to
 **GitHub Actions**. After that, every push to `main` deploys automatically
 (or trigger it manually from the Actions tab).
+
+### Live restaurant search (optional)
+
+Real restaurant data comes from a small Cloudflare Worker that proxies the
+Yelp Fusion API — see [`worker/README.md`](worker/README.md) for the
+one-time setup (Yelp API key, Cloudflare account, GitHub secrets). Without
+it, the app works fine using its built-in demo restaurant list.

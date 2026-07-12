@@ -8,6 +8,10 @@ export type Restaurant = {
   zip: string
   emoji: string
   description: string
+  imageUrl?: string
+  yelpRating?: number
+  yelpReviewCount?: number
+  yelpUrl?: string
 }
 
 export const restaurants: Restaurant[] = [
@@ -145,9 +149,11 @@ export const restaurants: Restaurant[] = [
   },
 ]
 
-export const cuisines: string[] = Array.from(
-  new Set(restaurants.map((restaurant) => restaurant.cuisine)),
-).sort()
+export function cuisinesFrom(list: Restaurant[]): string[] {
+  return Array.from(new Set(list.map((restaurant) => restaurant.cuisine))).sort()
+}
+
+export const cuisines: string[] = cuisinesFrom(restaurants)
 
 export function sortByProximity(zip: string): Restaurant[] {
   const zipNum = parseInt(zip, 10)

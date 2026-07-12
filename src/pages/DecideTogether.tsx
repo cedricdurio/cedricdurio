@@ -1,18 +1,22 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { cuisines } from '../data/restaurants'
+import { cuisinesFrom } from '../data/restaurants'
 import { findMatches, moods, budgets, type Mood, type Budget, type Match } from '../lib/matchmaker'
 import { useStoreLocation } from '../context/LocationContext'
 import { useReviews } from '../context/ReviewsContext'
+import { useRestaurantPool } from '../hooks/useRestaurantPool'
 import { StarRating } from '../components/StarRating'
 
 export function DecideTogether() {
   const { zip } = useStoreLocation()
   const { averageRating } = useReviews()
+  const pool = useRestaurantPool()
   const [mood, setMood] = useState<Mood | null>(null)
   const [selectedCuisines, setSelectedCuisines] = useState<string[]>([])
   const [budget, setBudget] = useState<Budget>('any')
   const [matches, setMatches] = useState<Match[] | null>(null)
+
+  const cuisines = useMemo(() => cuisinesFrom(pool.restaurants), [pool.restaurants])
 
   const toggleCuisine = (cuisine: string) => {
     setSelectedCuisines((prev) =>
@@ -21,7 +25,12 @@ export function DecideTogether() {
   }
 
   const handleFindMatch = () => {
-    const results = findMatches({ mood, cuisines: selectedCuisines, budget }, zip, averageRating)
+    const results = findMatches(
+      pool.restaurants,
+      { mood, cuisines: selectedCuisines, budget },
+      zip,
+      averageRating,
+    )
     setMatches(results)
   }
 

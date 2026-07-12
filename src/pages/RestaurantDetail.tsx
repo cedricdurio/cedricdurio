@@ -1,21 +1,44 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
-import { findRestaurant } from '../data/restaurants'
+import { findRestaurant, type Restaurant } from '../data/restaurants'
+import { fetchRestaurantById } from '../lib/yelpApi'
 import { useReviews } from '../context/ReviewsContext'
 import { useAuth } from '../context/AuthContext'
 import { StarRating } from '../components/StarRating'
 
 export function RestaurantDetail() {
   const { id } = useParams<{ id: string }>()
-  const restaurant = id ? findRestaurant(id) : undefined
+  const [restaurant, setRestaurant] = useState<Restaurant | null | undefined>(() =>
+    id ? findRestaurant(id) : undefined,
+  )
   const { user } = useAuth()
   const { addReview, reviewsFor, averageRating } = useReviews()
   const [rating, setRating] = useState(5)
   const [comment, setComment] = useState('')
   const [submitted, setSubmitted] = useState(false)
 
-  if (!restaurant) {
+  useEffect(() => {
+    const local = id ? findRestaurant(id) : undefined
+    if (local || !id) return
+    let cancelled = false
+    fetchRestaurantById(id).then((fetched) => {
+      if (!cancelled) setRestaurant(fetched)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [id])
+
+  if (restaurant === null) {
     return <Navigate to="/" replace />
+  }
+
+  if (!restaurant) {
+    return (
+      <main className="mx-auto max-w-2xl px-4 py-20 text-center sm:px-6">
+        <p className="text-ink-soft">Loading restaurant…</p>
+      </main>
+    )
   }
 
   const reviews = reviewsFor(restaurant.id)
@@ -36,9 +59,17 @@ export function RestaurantDetail() {
       </Link>
 
       <div className="mt-4 flex items-start gap-4">
-        <div className="text-4xl" aria-hidden>
-          {restaurant.emoji}
-        </div>
+        {restaurant.imageUrl ? (
+          <img
+            src={restaurant.imageUrl}
+            alt=""
+            className="h-16 w-16 rounded-xl object-cover"
+          />
+        ) : (
+          <div className="text-4xl" aria-hidden>
+            {restaurant.emoji}
+          </div>
+        )}
         <div>
           <h1 className="font-display text-3xl text-ink">{restaurant.name}</h1>
           <p className="text-ink-soft">
@@ -50,9 +81,32 @@ export function RestaurantDetail() {
         </div>
       </div>
 
-      <p className="mt-4 text-ink-soft">{restaurant.description}</p>
+      {restaurant.description && <p className="mt-4 text-ink-soft">{restaurant.description}</p>}
+
+      {restaurant.yelpRating !== undefined && (
+        <p className="mt-4 text-sm text-ink-soft">
+          {restaurant.yelpRating.toFixed(1)} ★ on Yelp ({restaurant.yelpReviewCount ?? 0} reviews)
+          {restaurant.yelpUrl && (
+            <>
+              {' '}
+              &middot;{' '}
+              <a
+                href={restaurant.yelpUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-gold hover:underline"
+              >
+                View on Yelp
+              </a>
+            </>
+          )}
+        </p>
+      )}
 
       <div className="mt-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft">
+          Prime Bites reviews
+        </p>
         <StarRating rating={average} count={reviews.length} />
       </div>
 
