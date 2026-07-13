@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+aol-email-connector/.env
+aol-email-connector/node_modules
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

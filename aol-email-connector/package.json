@@ -1,0 +1,14 @@
+{
+  "name": "aol-email-connector",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Standalone CLI: check an AOL Mail inbox over IMAP, summarize it, and optionally delete selected messages (dry-run by default).",
+  "scripts": {
+    "start": "node index.mjs"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "imapflow": "^1.0.191"
+  }
+}
